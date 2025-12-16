@@ -34,6 +34,6 @@ public class Animal {
     }
 
     public void displayAnimalInfo() {
-        System.out.println("Животное: " + name + ", Вид: " + species + ", Возраст: " + age + " лет");
+        System.out.println("Animal: " + name + ", Species: " + species + ", Age: " + age + " years");
     }
 }
