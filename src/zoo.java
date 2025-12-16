@@ -1,12 +1,12 @@
-public class Zoo {
+public class zoo {
     private String zooname;
     public zoo (String zooname){
         this.zooname=zooname;
     }
-    public String getZooname (){
+    public String getZooName (){
         return zooname;
     }
-    public String displayZooInfo(){
+    public void displayZooInfo(){
         System.out.println("Zoo: " + zooname);
     }
 }
