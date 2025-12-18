@@ -4,7 +4,7 @@ public class Main {
         Animal animal2=new Animal("Lion", "predator",5);
 
         ZooKeeper keeper = new ZooKeeper("Sam", 10);
-        zoo zoo= new zoo("Сentral zoo");
+        Zoo zoo= new Zoo("Сentral zoo");
 
         zoo.displayZooInfo();
         animal1.displayAnimalInfo();
