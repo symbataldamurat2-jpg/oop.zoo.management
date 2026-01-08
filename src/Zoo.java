@@ -13,7 +13,6 @@ public class Zoo {
         this.keepers = new ArrayList<>();
     }
 
-
     public void addAnimal(Animal animal) {
         animals.add(animal);
     }
@@ -22,56 +21,40 @@ public class Zoo {
         keepers.add(keeper);
     }
 
-
     public ArrayList<Animal> filterBySpecies(String species) {
         ArrayList<Animal> result = new ArrayList<>();
-        for (Animal animal : animals) {
-            if (animal.getSpecies().equalsIgnoreCase(species)) {
-                result.add(animal);
+        for (Animal a : animals) {
+            if (a.getSpecies().equals(species)) {
+                result.add(a);
             }
         }
         return result;
     }
 
-
-    public Animal findAnimalByName(String name) {
-        for (Animal animal : animals) {
-            if (animal.getName().equalsIgnoreCase(name)) {
-                return animal;
+    public Animal findAnimal(String name) {
+        for (Animal a : animals) {
+            if (a.getName().equals(name)) {
+                return a;
             }
         }
         return null;
     }
 
-
-    public ArrayList<Animal> sortAnimalsByAge() {
+    public ArrayList<Animal> sortByAge() {
         ArrayList<Animal> sorted = new ArrayList<>(animals);
-        Collections.sort(sorted, new Comparator<Animal>() {
-            @Override
-            public int compare(Animal a1, Animal a2) {
-                return Integer.compare(a1.getAge(), a2.getAge());
-            }
-        });
+        Collections.sort(sorted, Comparator.comparingInt(Animal::getAge));
         return sorted;
     }
 
-
-    public void showAllAnimals() {
-        System.out.println("=== Animals in " + name + " ===");
-        for (Animal animal : animals) {
-            System.out.println(animal);
+    public void showAnimals() {
+        for (Animal a : animals) {
+            System.out.println(a);
         }
     }
 
-
-    public void showAllKeepers() {
-        System.out.println("=== Keepers in " + name + " ===");
-        for (ZooKeeper keeper : keepers) {
-            System.out.println(keeper);
+    public void showKeepers() {
+        for (ZooKeeper k : keepers) {
+            System.out.println(k);
         }
-    }
-
-    public String getName() {
-        return name;
     }
 }
