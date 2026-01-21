@@ -7,10 +7,10 @@ public class Main {
         DB db = new DB();
 
         try {
-            // Создаем таблицы при запуске
+
             db.createTables();
 
-            // Добавляем начальные данные (с проверкой, чтобы избежать дублирования)
+
             if (!db.animalExists("Leo")) {
                 db.insertAnimal(new Mammal("Leo", "Lion", 5));
             }
@@ -21,7 +21,7 @@ public class Main {
                 db.insertAnimal(new Mammal("Simba", "Lion", 3));
             }
 
-            // Проверяем, существует ли уже смотритель с ID 110
+
             if (!db.zookeeperIdExists(110)) {
                 db.insertZooKeeper(new ZooKeeper("John Smith", 110));
             }
@@ -88,13 +88,13 @@ public class Main {
                         int newAge = scan.nextInt();
                         scan.nextLine();
 
-                        // Проверка возраста
+
                         if (newAge < 0) {
                             System.out.println("Error: Age cannot be negative!");
                             break;
                         }
 
-                        // Проверка, существует ли уже животное с таким именем
+
                         if (db.animalExists(newName)) {
                             System.out.println("Error: Animal with name '" + newName + "' already exists!");
                             break;
@@ -114,7 +114,7 @@ public class Main {
                         System.out.print("Animal name: ");
                         String updateName = scan.nextLine();
 
-                        // Проверка существования
+
                         if (!db.animalExists(updateName)) {
                             System.out.println("Error: Animal not found!");
                             break;
@@ -137,7 +137,7 @@ public class Main {
                         System.out.print("Animal name to delete: ");
                         String deleteName = scan.nextLine();
 
-                        // Проверка существования
+
                         if (!db.animalExists(deleteName)) {
                             System.out.println("Error: Animal not found!");
                             break;
@@ -160,13 +160,13 @@ public class Main {
                         int zkId = scan.nextInt();
                         scan.nextLine();
 
-                        // Проверка ID
+
                         if (zkId <= 0) {
                             System.out.println("Error: Employee ID must be positive!");
                             break;
                         }
 
-                        // Проверка, существует ли уже такой ID
+
                         if (db.zookeeperIdExists(zkId)) {
                             System.out.println("Error: Employee ID " + zkId + " already exists!");
                             System.out.println("Please use a different ID.");

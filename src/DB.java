@@ -10,7 +10,7 @@ public class DB {
         return DriverManager.getConnection(DB_URL, USER, PASS);
     }
 
-    // 1. Создание таблиц
+
     public void createTables() throws SQLException {
         String createAnimalTable = """
             CREATE TABLE IF NOT EXISTS Animal (
@@ -38,7 +38,7 @@ public class DB {
         }
     }
 
-    // 2. Вставка животного
+
     public void insertAnimal(Animal animal) throws SQLException {
         String type = (animal instanceof Mammal) ? "Mammal" : "Bird";
         String sql = "INSERT INTO Animal (name, species, age, animal_type) VALUES (?, ?, ?, ?)";
@@ -54,7 +54,7 @@ public class DB {
         }
     }
 
-    // 3. Получение всех животных
+
     public ArrayList<Animal> getAllAnimals() throws SQLException {
         ArrayList<Animal> animals = new ArrayList<>();
         String sql = "SELECT * FROM Animal";
@@ -81,7 +81,7 @@ public class DB {
         return animals;
     }
 
-    // 4. Поиск животного по имени
+
     public Animal findAnimal(String name) throws SQLException {
         String sql = "SELECT * FROM Animal WHERE name = ?";
 
@@ -106,7 +106,7 @@ public class DB {
         return null;
     }
 
-    // 5. Получение животных по виду (ИСПРАВЛЕННЫЙ)
+
     public ArrayList<Animal> getAnimalsBySpecies(String species) throws SQLException {
         ArrayList<Animal> animals = new ArrayList<>();
         String sql = "SELECT * FROM Animal WHERE LOWER(species) = LOWER(?)";
@@ -134,7 +134,7 @@ public class DB {
         return animals;
     }
 
-    // 6. Обновление возраста животного
+
     public void updateAnimalAge(String name, int newAge) throws SQLException {
         String sql = "UPDATE Animal SET age = ? WHERE name = ?";
 
@@ -147,7 +147,7 @@ public class DB {
         }
     }
 
-    // 7. Удаление животного
+
     public void deleteAnimal(String name) throws SQLException {
         String sql = "DELETE FROM Animal WHERE name = ?";
 
@@ -159,7 +159,7 @@ public class DB {
         }
     }
 
-    // 8. Проверка существования животного (НОВЫЙ метод)
+
     public boolean animalExists(String name) throws SQLException {
         String sql = "SELECT COUNT(*) FROM Animal WHERE name = ?";
 
@@ -174,7 +174,7 @@ public class DB {
         return false;
     }
 
-    // 9. Вставка смотрителя
+
     public void insertZooKeeper(ZooKeeper keeper) throws SQLException {
         String sql = "INSERT INTO ZooKeeper (name, employee_id) VALUES (?, ?)";
 
@@ -187,7 +187,7 @@ public class DB {
         }
     }
 
-    // 10. Получение всех смотрителей
+
     public ArrayList<ZooKeeper> getAllZooKeepers() throws SQLException {
         ArrayList<ZooKeeper> keepers = new ArrayList<>();
         String sql = "SELECT * FROM ZooKeeper";
@@ -205,7 +205,7 @@ public class DB {
         return keepers;
     }
 
-    // 11. Проверка существования ID смотрителя (НОВЫЙ метод)
+
     public boolean zookeeperIdExists(int employeeId) throws SQLException {
         String sql = "SELECT COUNT(*) FROM ZooKeeper WHERE employee_id = ?";
 
@@ -220,7 +220,7 @@ public class DB {
         return false;
     }
 
-    // 12. Тестовый метод
+
     public static void main(String[] args) {
         DB db = new DB();
 
