@@ -1,60 +1,46 @@
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
-public class Zoo {
-    private String name;
+public class Zoo{
     private ArrayList<Animal> animals;
-    private ArrayList<ZooKeeper> keepers;
-
-    public Zoo(String name) {
-        this.name = name;
-        this.animals = new ArrayList<>();
-        this.keepers = new ArrayList<>();
+    public Zoo(){
+        animals=new ArrayList<>();
     }
-
-    public void addAnimal(Animal animal) {
-        animals.add(animal);
+    public void addAnimal(Animal a){
+        animals.add(a);
     }
-
-    public void addKeeper(ZooKeeper keeper) {
-        keepers.add(keeper);
-    }
-
-    public ArrayList<Animal> filterBySpecies(String species) {
-        ArrayList<Animal> result = new ArrayList<>();
-        for (Animal a : animals) {
-            if (a.getSpecies().equals(species)) {
+    public ArrayList<Animal> getBySpecies(String species){
+        ArrayList<Animal> result= new ArrayList<>();
+        for (Animal a:animals){
+            if(a.getSpecies().equals(species)){
                 result.add(a);
             }
         }
         return result;
     }
-
-    public Animal findAnimal(String name) {
-        for (Animal a : animals) {
-            if (a.getName().equals(name)) {
+    public Animal findByName(String name){
+        for(Animal a:animals){
+            if(a.getName().equals(name)){
                 return a;
             }
         }
         return null;
     }
-
-    public ArrayList<Animal> sortByAge() {
-        ArrayList<Animal> sorted = new ArrayList<>(animals);
-        Collections.sort(sorted, Comparator.comparingInt(Animal::getAge));
+    public ArrayList<Animal> sortByAge(){
+        ArrayList<Animal> sorted=new ArrayList<>(animals);
+        for(int i=0;i< sorted.size()-1;i++){
+            for(int j=i+1;j<sorted.size();j++){
+                if (sorted.get(i).getAge()>sorted.get(j).getAge()){
+                    Animal temp=sorted.get(i);
+                    sorted.set(i,sorted.get(j));
+                    sorted.set(j,temp);
+                }
+            }
+        }
         return sorted;
     }
-
-    public void showAnimals() {
-        for (Animal a : animals) {
+    public void showAll(){
+        for(Animal a:animals){
             System.out.println(a);
         }
     }
 
-    public void showKeepers() {
-        for (ZooKeeper k : keepers) {
-            System.out.println(k);
-        }
-    }
 }
