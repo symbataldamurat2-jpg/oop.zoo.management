@@ -106,7 +106,7 @@ public class DB {
         return null;
     }
 
-    // 5. Получение животных по виду
+    // 5. Получение животных по виду (ИСПРАВЛЕННЫЙ)
     public ArrayList<Animal> getAnimalsBySpecies(String species) throws SQLException {
         ArrayList<Animal> animals = new ArrayList<>();
         String sql = "SELECT * FROM Animal WHERE LOWER(species) = LOWER(?)";
@@ -159,7 +159,22 @@ public class DB {
         }
     }
 
-    // 8. Вставка смотрителя
+    // 8. Проверка существования животного (НОВЫЙ метод)
+    public boolean animalExists(String name) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Animal WHERE name = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, name);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+        return false;
+    }
+
+    // 9. Вставка смотрителя
     public void insertZooKeeper(ZooKeeper keeper) throws SQLException {
         String sql = "INSERT INTO ZooKeeper (name, employee_id) VALUES (?, ?)";
 
@@ -172,7 +187,7 @@ public class DB {
         }
     }
 
-    // 9. Получение всех смотрителей
+    // 10. Получение всех смотрителей
     public ArrayList<ZooKeeper> getAllZooKeepers() throws SQLException {
         ArrayList<ZooKeeper> keepers = new ArrayList<>();
         String sql = "SELECT * FROM ZooKeeper";
@@ -190,7 +205,22 @@ public class DB {
         return keepers;
     }
 
-    // 10. Тестовый метод
+    // 11. Проверка существования ID смотрителя (НОВЫЙ метод)
+    public boolean zookeeperIdExists(int employeeId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM ZooKeeper WHERE employee_id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, employeeId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+        return false;
+    }
+
+    // 12. Тестовый метод
     public static void main(String[] args) {
         DB db = new DB();
 
@@ -220,6 +250,12 @@ public class DB {
             Animal found = db.findAnimal("Leo");
             if (found != null) {
                 System.out.println("Found: " + found);
+            }
+
+            // Поиск по виду
+            System.out.println("\nAll lions:");
+            for (Animal a : db.getAnimalsBySpecies("Lion")) {
+                System.out.println(a);
             }
 
             // UPDATE

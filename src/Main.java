@@ -10,11 +10,21 @@ public class Main {
             // Создаем таблицы при запуске
             db.createTables();
 
-            // Добавляем начальные данные
-            db.insertAnimal(new Mammal("Leo", "Lion", 5));
-            db.insertAnimal(new Bird("Polly", "Parrot", 2));
-            db.insertAnimal(new Mammal("Simba", "Lion", 3));
-            db.insertZooKeeper(new ZooKeeper("John Smith", 110));
+            // Добавляем начальные данные (с проверкой, чтобы избежать дублирования)
+            if (!db.animalExists("Leo")) {
+                db.insertAnimal(new Mammal("Leo", "Lion", 5));
+            }
+            if (!db.animalExists("Polly")) {
+                db.insertAnimal(new Bird("Polly", "Parrot", 2));
+            }
+            if (!db.animalExists("Simba")) {
+                db.insertAnimal(new Mammal("Simba", "Lion", 3));
+            }
+
+            // Проверяем, существует ли уже смотритель с ID 110
+            if (!db.zookeeperIdExists(110)) {
+                db.insertZooKeeper(new ZooKeeper("John Smith", 110));
+            }
 
             System.out.println("=== ZOO DATABASE SYSTEM ===");
 
@@ -60,11 +70,9 @@ public class Main {
                         System.out.print("Species: ");
                         String species = scan.nextLine();
                         System.out.println("Animals of species '" + species + "':");
-                        // Нужно добавить метод в DB для поиска по виду
-                        for (Animal a : db.getAllAnimals()) {
-                            if (a.getSpecies().equalsIgnoreCase(species)) {
-                                System.out.println(a);
-                            }
+                        // ИСПРАВЛЕНО: используем метод getAnimalsBySpecies
+                        for (Animal a : db.getAnimalsBySpecies(species)) {
+                            System.out.println(a);
                         }
                         break;
 
@@ -80,6 +88,18 @@ public class Main {
                         int newAge = scan.nextInt();
                         scan.nextLine();
 
+                        // Проверка возраста
+                        if (newAge < 0) {
+                            System.out.println("Error: Age cannot be negative!");
+                            break;
+                        }
+
+                        // Проверка, существует ли уже животное с таким именем
+                        if (db.animalExists(newName)) {
+                            System.out.println("Error: Animal with name '" + newName + "' already exists!");
+                            break;
+                        }
+
                         Animal newAnimal;
                         if (typeChoice == 1) {
                             newAnimal = new Mammal(newName, newSpecies, newAge);
@@ -93,16 +113,44 @@ public class Main {
                     case 5:
                         System.out.print("Animal name: ");
                         String updateName = scan.nextLine();
+
+                        // Проверка существования
+                        if (!db.animalExists(updateName)) {
+                            System.out.println("Error: Animal not found!");
+                            break;
+                        }
+
                         System.out.print("New age: ");
                         int updateAge = scan.nextInt();
                         scan.nextLine();
+
+                        if (updateAge < 0) {
+                            System.out.println("Error: Age cannot be negative!");
+                            break;
+                        }
+
                         db.updateAnimalAge(updateName, updateAge);
+                        System.out.println("Age updated successfully!");
                         break;
 
                     case 6:
                         System.out.print("Animal name to delete: ");
                         String deleteName = scan.nextLine();
-                        db.deleteAnimal(deleteName);
+
+                        // Проверка существования
+                        if (!db.animalExists(deleteName)) {
+                            System.out.println("Error: Animal not found!");
+                            break;
+                        }
+
+                        System.out.print("Are you sure you want to delete '" + deleteName + "'? (y/n): ");
+                        String confirm = scan.nextLine();
+                        if (confirm.equalsIgnoreCase("y")) {
+                            db.deleteAnimal(deleteName);
+                            System.out.println("Animal deleted successfully!");
+                        } else {
+                            System.out.println("Deletion cancelled.");
+                        }
                         break;
 
                     case 7:
@@ -111,8 +159,22 @@ public class Main {
                         System.out.print("Employee ID: ");
                         int zkId = scan.nextInt();
                         scan.nextLine();
+
+                        // Проверка ID
+                        if (zkId <= 0) {
+                            System.out.println("Error: Employee ID must be positive!");
+                            break;
+                        }
+
+                        // Проверка, существует ли уже такой ID
+                        if (db.zookeeperIdExists(zkId)) {
+                            System.out.println("Error: Employee ID " + zkId + " already exists!");
+                            System.out.println("Please use a different ID.");
+                            break;
+                        }
+
                         db.insertZooKeeper(new ZooKeeper(zkName, zkId));
-                        System.out.println("Zookeeper added!");
+                        System.out.println("Zookeeper added successfully!");
                         break;
 
                     case 8:
@@ -140,6 +202,7 @@ public class Main {
             }
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             scan.close();
         }
